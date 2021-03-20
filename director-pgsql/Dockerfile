@@ -28,6 +28,7 @@ RUN set -ex; \
 	\
 	apt -y install --no-install-recommends \
 		bareos-director \
+		bareos-bconsole \
 		postgresql-client \
 		msmtp-mta \
 	; \
