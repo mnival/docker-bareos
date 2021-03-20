@@ -8,6 +8,9 @@ ENV BAREOS_REPO http://download.bareos.org/bareos/release/${BAREOS_RELEASE}/Debi
 ENV BAREOS_KEY ${BAREOS_REPO}/Release.key
 
 RUN set -ex; \
+	addgroup -q --gid 120 --system bareos; \
+	adduser -q --system --ingroup bareos --home /var/lib/bareos --no-create-home --gecos "bareos" --uid 120 bareos; \
+	\
 	apt update; \
 	apt full-upgrade -y; \
 	\

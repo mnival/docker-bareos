@@ -9,6 +9,9 @@ ENV BAREOS_KEY ${BAREOS_REPO}/Release.key
 ENV BAREOS_DPKG_CONF bareos-database-common bareos-database-common
 
 RUN set -ex; \
+  addgroup -q --gid 120 --system bareos; \
+  adduser -q --system --ingroup bareos --home /var/lib/bareos --no-create-home --gecos "bareos" --uid 120 bareos; \
+  \
 	apt update; \
 	apt full-upgrade -y; \
 	\
