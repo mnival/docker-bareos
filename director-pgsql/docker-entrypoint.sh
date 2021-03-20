@@ -61,8 +61,12 @@ if [ ! -f /etc/bareos/controls/bareos-db ]; then
   /usr/lib/bareos/scripts/grant_bareos_privileges
   touch /etc/bareos/controls/bareos-db
 else
-  /usr/lib/bareos/scripts/update_bareos_tables
-  /usr/lib/bareos/scripts/grant_bareos_privileges
+  DB_VERSION=$(/usr/lib/bareos/scripts/bareos-config get_database_version)
+  DEFAULT_VERSION=$(sed -n "s/^default=//p" /usr/lib/bareos/scripts/ddl/versions.map)
+  if [ ${DB_VERSION} -lt ${DEFAULT_VERSION} ]; then
+    /usr/lib/bareos/scripts/update_bareos_tables
+    /usr/lib/bareos/scripts/grant_bareos_privileges
+  fi
 fi
 
 # Remove variable
@@ -72,3 +76,5 @@ chown bareos:bareos /var/lib/bareos /etc/bareos/.rndpwd
 
 # Run CMD
 exec "$@"
+
+# vim: ts=2 sts=2 sw=2 expandtab
