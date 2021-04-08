@@ -39,6 +39,11 @@ if [ ! -f /etc/bareos/controls/bareos-dir ]; then
   touch /etc/bareos/controls/bareos-dir
 fi
 
+if [ ! -f /etc/bareos/controls/bconsole ]; then
+	/usr/lib/bareos/scripts/bareos-config deploy_config "/usr/lib/bareos/defaultconfigs" "/etc/bareos" "bareos-bconsole"
+	touch /etc/bareos/controls/bconsole
+fi
+
 export PGUSER=${POSTGRES_USER}
 export PGHOST=${BAREOS_DB_HOST}
 export PGPASSWORD=${POSTGRES_PASSWORD}
