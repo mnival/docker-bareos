@@ -22,6 +22,7 @@ RUN set -ex; \
 	\
 	apt -y install --no-install-recommends \
 		bareos-storage \
+		bareos-storage-droplet \
 	; \
 	rm -rf /var/lib/apt/lists/* /etc/bareos/* /etc/bareos/.rndpwd
 
