@@ -20,18 +20,23 @@ SMTP_SERVER="${SMTP_SERVER:-localhost}"
 [ ! -d /etc/bareos/controls/ ] && mkdir /etc/bareos/controls/
 
 if [ ! -f /etc/bareos/controls/bareos-dir ]; then
+  printf "File /etc/bareos/controls/bareos-dir do not exist\n"
   # Init configuration
   if [ ! -d /etc/bareos/bareos-dir.d ]; then
+	printf "Directory /etc/bareos/bareos-dir.d do not exist\nLaunch deploy_config bareos-dir\n"
     /usr/lib/bareos/scripts/bareos-config deploy_config "/usr/lib/bareos/defaultconfigs" "/etc/bareos" "bareos-dir"
   fi
+  printf "Initialize database driver\n"
   /usr/lib/bareos/scripts/bareos-config initialize_database_driver
   # Configuration Catalog
+  printf "Configuration Catalog\n"
   sed -i 's#dbpassword = ""#dbpassword = '\"${BAREOS_DB_PASSWORD}\"'#' /etc/bareos/bareos-dir.d/catalog/MyCatalog.conf
   sed -i 's#dbname = "bareos"#dbname = '\"${BAREOS_DB_NAME}\"'\n  dbaddress = '\"${BAREOS_DB_HOST}\"'\n  dbport = '\"${BAREOS_DB_PORT}\"'#' /etc/bareos/bareos-dir.d/catalog/MyCatalog.conf
   if [ "x${BAREOS_CATALOG_NAME}" != "xMyCatalog" ]; then
     /usr/lib/bareos/scripts/bareos-config replace MyCatalog ${BAREOS_CATALOG_NAME}
     mv /etc/bareos/bareos-dir.d/catalog/MyCatalog.conf /etc/bareos/bareos-dir.d/catalog/${BAREOS_CATALOG_NAME}.conf
   fi
+  printf "Update configuration\n"
   /usr/lib/bareos/scripts/bareos-config replace "bsmtp -h localhost" "bsmtp -h ${SMTP_SERVER}"
   sed -i 's#append = "/var/log/bareos/bareos.log" \(.*\)$#stdout \1#; s#append = "/var/log/bareos/bareos-audit.log"#stdout#' /etc/bareos/bareos-dir.d/messages/*.conf
   [ -f /etc/bareos/bareos-dir.d/storage/File.conf ] && sed -i 's?Address = .* \( *# .*\)$?Address = '\"${BAREOS_SD_HOST}\"'\1?' /etc/bareos/bareos-dir.d/storage/File.conf
@@ -39,9 +44,9 @@ if [ ! -f /etc/bareos/controls/bareos-dir ]; then
   touch /etc/bareos/controls/bareos-dir
 fi
 
-if [ ! -f /etc/bareos/controls/bconsole ]; then
+if [ ! -f /etc/bareos/bconsole.conf ]; then
+	printf "File /etc/bareos/bconsole.conf does not exist\nLaunch deploy_config bconsole\n"
 	/usr/lib/bareos/scripts/bareos-config deploy_config "/usr/lib/bareos/defaultconfigs" "/etc/bareos" "bconsole"
-	touch /etc/bareos/controls/bconsole
 fi
 
 export PGUSER=${POSTGRES_USER}
@@ -60,6 +65,7 @@ if [ "$try" -gt "$max_retries" ]; then
 fi
 
 if [ ! -f /etc/bareos/controls/bareos-db ]; then
+  printf "File /etc/bareos/controls/bareos-db does not exist\nLaunch init database\n"
   # Init database
   /usr/lib/bareos/scripts/create_bareos_database
   /usr/lib/bareos/scripts/make_bareos_tables
@@ -69,6 +75,7 @@ else
   DB_VERSION=$(/usr/lib/bareos/scripts/bareos-config get_database_version)
   DEFAULT_VERSION=$(sed -n "s/^default=//p" /usr/lib/bareos/scripts/ddl/versions.map)
   if [ ${DB_VERSION} -lt ${DEFAULT_VERSION} ]; then
+	printf "Update database to ${DEFAULT_VERSION}\n"
     /usr/lib/bareos/scripts/update_bareos_tables
     /usr/lib/bareos/scripts/grant_bareos_privileges
   fi
