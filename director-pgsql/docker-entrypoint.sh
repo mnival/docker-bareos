@@ -40,7 +40,7 @@ if [ ! -f /etc/bareos/controls/bareos-dir ]; then
 fi
 
 if [ ! -f /etc/bareos/controls/bconsole ]; then
-	/usr/lib/bareos/scripts/bareos-config deploy_config "/usr/lib/bareos/defaultconfigs" "/etc/bareos" "bareos-bconsole"
+	/usr/lib/bareos/scripts/bareos-config deploy_config "/usr/lib/bareos/defaultconfigs" "/etc/bareos" "bconsole"
 	touch /etc/bareos/controls/bconsole
 fi
 
