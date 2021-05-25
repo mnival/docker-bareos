@@ -51,7 +51,7 @@ fi
 
 if egrep "XXX_REPLACE_WITH_ADMIN_PASSWORD_XXX" /etc/bareos/bareos-dir.d/console/admin.conf 2>/dev/null; then
   NEW_PASSWORD="$(openssl rand -base64 20)"
-  /usr/lib/bareos/scripts/bareos-config replace generate_new ${NEW_PASSWORD}
+  /usr/lib/bareos/scripts/bareos-config replace "XXX_REPLACE_WITH_ADMIN_PASSWORD_XXX" "${NEW_PASSWORD}"
   echo "admin password is ${NEW_PASSWORD}"
 fi
 
