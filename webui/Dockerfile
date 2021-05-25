@@ -20,7 +20,13 @@ RUN set -ex; \
 	apt -y install --no-install-recommends \
 		bareos-webui \
 	; \
-	rm -rf /var/lib/apt/lists/* /etc/bareos/* /etc/bareos/.rndpwd
+  sed -i 's#Alias /bareos-webui#Alias /#; s#RewriteBase /bareos-webui#RewriteBase /#' /etc/apache2/conf-available/bareos-webui.conf; \
+  rm /var/log/apache2/access.log /var/log/apache2/error.log /var/log/apache2/other_vhosts_access.log; \
+  ln -s /dev/stdout /var/log/apache2/access.log; \
+  ln -s /dev/stdout /var/log/apache2/other_vhosts_access.log; \
+  ln -s /dev/stderr /var/log/apache2/error.log; \
+  \
+	rm -rf /var/lib/apt/lists/* /etc/bareos
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod u+x /docker-entrypoint.sh
