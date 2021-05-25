@@ -49,6 +49,12 @@ if [ ! -f /etc/bareos/bconsole.conf ]; then
 	/usr/lib/bareos/scripts/bareos-config deploy_config "/usr/lib/bareos/defaultconfigs" "/etc/bareos" "bconsole"
 fi
 
+if egrep "XXX_REPLACE_WITH_ADMIN_PASSWORD_XXX" /etc/bareos/bareos-dir.d/console/admin.conf 2>/dev/null; then
+  NEW_PASSWORD="$(openssl rand -base64 20)"
+  /usr/lib/bareos/scripts/bareos-config replace generate_new ${NEW_PASSWORD}
+  echo "admin password is ${NEW_PASSWORD}"
+fi
+
 export PGUSER=${POSTGRES_USER}
 export PGHOST=${BAREOS_DB_HOST}
 export PGPASSWORD=${POSTGRES_PASSWORD}

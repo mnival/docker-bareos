@@ -36,7 +36,10 @@ RUN set -ex; \
 	chown bareos:bareos /var/lib/bareos/storage/; \
 	rm -rf /var/lib/apt/lists/* /etc/bareos/* /etc/bareos/.rndpwd
 
-COPY docker-entrypoint.sh /docker-entrypoint.sh
+COPY ./docker-entrypoint.sh /docker-entrypoint.sh
+COPY ./config/webui-admin.conf /usr/lib/bareos/defaultconfigs/bareos-dir.d/profile/
+COPY ./config/admin.conf /usr/lib/bareos/defaultconfigs/bareos-dir.d/console/
+
 RUN chmod u+x /docker-entrypoint.sh
 
 EXPOSE 9101
