@@ -23,6 +23,7 @@ RUN set -ex; \
 	apt -y install --no-install-recommends \
 		bareos-storage \
 		bareos-storage-droplet \
+    netcat \
 	; \
 	rm -rf /var/lib/apt/lists/* /etc/bareos/* /etc/bareos/.rndpwd
 
@@ -33,6 +34,9 @@ EXPOSE 9103
 
 VOLUME /etc/bareos
 VOLUME /var/lib/bareos
+
+HEALTHCHECK --interval=1m --start-period=1m --timeout=3s --retries=3 \
+  CMD netcat -vz 127.0.0.1 9103 || exit 1
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/usr/sbin/bareos-sd", "-u", "bareos", "-f"]
