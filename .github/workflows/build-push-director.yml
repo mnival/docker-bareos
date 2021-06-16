@@ -1,4 +1,4 @@
-name: build and push docker image
+name: build and push docker image bareos-director
 
 on:
   workflow_dispatch:
