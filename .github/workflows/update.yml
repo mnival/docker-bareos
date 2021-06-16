@@ -20,7 +20,7 @@ jobs:
         run: |
           set -euo pipefail
           for i in client director-pgsql storage webui; do \
-            cat templates/Dockerfile Dockerfile.${i} > ${i}/Dockerfile; \
+            cat templates/Dockerfile templates/Dockerfile.${i} > ${i}/Dockerfile; \
           done
           git config user.name github-actions
           git config user.email github-actions@github.com
