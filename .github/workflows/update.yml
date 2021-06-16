@@ -1,0 +1,29 @@
+name: Update Dockerfile and push in repo
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - main
+    paths:
+      - 'templates/**'
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: update and push
+        run: |
+          set -euo pipefail
+          for i in client director-pgsql storage webui; do \
+            cat templates/Dockerfile Dockerfile.${i} > ${i}/Dockerfile; \
+          done
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "auto update"
+          git push
