@@ -1,4 +1,4 @@
-name: build and push docker image bareos-director
+name: build and push docker image bareos-director-pgsql
 
 on:
   workflow_dispatch:
@@ -26,7 +26,8 @@ jobs:
         id: tags_caches
         env:
           DOCKER_IMAGES: "${{ github.actor }} ghcr.io/${{ github.actor }} quay.io/${{ github.actor }}"
-          IMAGE_NAME: "bareos-director"
+          DIRECTORY_NAME: "director-pgsql"
+          IMAGE_NAME: "bareos-${DIRECTORY_NAME}"
         run: |
           TAGS=()
           CACHES=()
@@ -41,7 +42,7 @@ jobs:
           done
           echo ::set-output name=tags::$(IFS=,; echo "${TAGS[*]}")
           echo ::set-output name=caches::$(IFS=,; echo "${CACHES[*]}")
-          echo ::set-output name=image_name::${IMAGE_NAME}
+          echo ::set-output name=directory_name::${DIRECTORY_NAME}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -72,7 +73,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
-          context: ${{ steps.tags_caches.outputs.image_name }}/
+          context: ${{ steps.tags_caches.outputs.directory_name }}/
           platforms: linux/amd64
           push: true
           tags: ${{ steps.tags_caches.outputs.tags }}
