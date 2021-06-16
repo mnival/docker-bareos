@@ -27,11 +27,11 @@ jobs:
         env:
           DOCKER_IMAGES: "${{ github.actor }} ghcr.io/${{ github.actor }} quay.io/${{ github.actor }}"
           DIRECTORY_NAME: "director-pgsql"
-          IMAGE_NAME: "bareos-${DIRECTORY_NAME}"
         run: |
           TAGS=()
           CACHES=()
           COUNT=0
+          IMAGE_NAME="bareos-${DIRECTORY_NAME}"
           for image in $DOCKER_IMAGES; do
             TAGS+=("${image}/${IMAGE_NAME}:latest")
             TAGS+=("${image}/${IMAGE_NAME}:${GITHUB_SHA::7}")
