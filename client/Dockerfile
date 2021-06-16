@@ -1,4 +1,6 @@
-FROM debian:stable-slim
+ARG DEBIAN_DATE_VERSION="20210511"
+ARG DEBIAN_VERSION="buster"
+FROM debian:${DEBIAN_VERSION}-${DEBIAN_DATE_VERSION}-slim
 LABEL maintainer "Michael Nival <docker@mn-home.fr>"
 
 ENV DEBIAN_FRONTEND noninteractive
