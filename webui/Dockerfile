@@ -1,4 +1,4 @@
-FROM debian:stable-slim
+FROM debian:buster-20210721-slim
 LABEL maintainer "Michael Nival <docker@mn-home.fr>"
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -8,6 +8,9 @@ ENV BAREOS_REPO http://download.bareos.org/bareos/release/${BAREOS_RELEASE}/Debi
 ENV BAREOS_KEY ${BAREOS_REPO}/Release.key
 
 RUN set -ex; \
+	addgroup -q --gid 120 --system bareos; \
+	adduser -q --system --ingroup bareos --home /var/lib/bareos --no-create-home --gecos "bareos" --uid 120 bareos; \
+	\
 	apt update; \
 	apt full-upgrade -y; \
 	\
@@ -17,16 +20,16 @@ RUN set -ex; \
 	printf "deb ${BAREOS_REPO} /\n" > /etc/apt/sources.list.d/bareos.list; \
 	apt update; \
 	\
-	apt -y install --no-install-recommends \
-		bareos-webui \
-	; \
+  apt -y install --no-install-recommends \
+    bareos-webui \
+  ; \
   sed -i 's#Alias /bareos-webui#Alias /#; s#RewriteBase /bareos-webui#RewriteBase /#; s#public#public/#g' /etc/apache2/conf-available/bareos-webui.conf; \
   rm /var/log/apache2/access.log /var/log/apache2/error.log /var/log/apache2/other_vhosts_access.log; \
   ln -s /dev/stdout /var/log/apache2/access.log; \
   ln -s /dev/stdout /var/log/apache2/other_vhosts_access.log; \
   ln -s /dev/stderr /var/log/apache2/error.log; \
   \
-	rm -rf /var/lib/apt/lists/* /etc/bareos
+  rm -rf /var/lib/apt/lists/* /etc/bareos
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod u+x /docker-entrypoint.sh

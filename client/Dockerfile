@@ -1,4 +1,4 @@
-FROM debian:buster-20210511-slim
+FROM debian:buster-20210721-slim
 LABEL maintainer "Michael Nival <docker@mn-home.fr>"
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -27,7 +27,7 @@ RUN set -ex; \
 	chown bareos:bareos /var/lib/bareos/storage/; \
 	rm -rf /var/lib/apt/lists/* /etc/bareos/* /etc/bareos/.rndpwd
 
-COPY docker-entrypoint.sh /docker-entrypoint.sh
+COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod u+x /docker-entrypoint.sh
 
 EXPOSE 9102
