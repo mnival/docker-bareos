@@ -18,6 +18,7 @@ RUN set -ex; \
 	apt-key --keyring /etc/apt/trusted.gpg.d/bareos-keyring.gpg adv --fetch-keys ${BAREOS_KEY}; \
 	apt purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false gnupg; \
 	printf "deb ${BAREOS_REPO} /\n" > /etc/apt/sources.list.d/bareos.list; \
+  printf "deb http://deb.debian.org/debian buster main\ndeb http://security.debian.org/debian-security buster/updates main\ndeb http://deb.debian.org/debian buster-updates main\n" > /etc/apt/sources.list.d/buster.list; \
 	apt update; \
 	\
   export BAREOS_DPKG_CONF="bareos-database-common bareos-database-common"; \
