@@ -79,9 +79,9 @@ if [ ! -f /etc/bareos/controls/bareos-db ]; then
   touch /etc/bareos/controls/bareos-db
 else
   DB_VERSION=$(/usr/lib/bareos/scripts/bareos-config get_database_version)
-  DEFAULT_VERSION=$(sed -n "s/^default=//p" /usr/lib/bareos/scripts/ddl/versions.map)
-  if [ ${DB_VERSION} -lt ${DEFAULT_VERSION} ]; then
-	printf "Update database to ${DEFAULT_VERSION}\n"
+  DB_CURRENT_VERSION=$(psql -qtAX -d bareos -c "select versionid from version")
+  if [ ${DB_CURRENT_VERSION} -lt ${DB_VERSION} ]; then
+    printf "Update database to ${DB_VERSION}\n"
     /usr/lib/bareos/scripts/update_bareos_tables
     /usr/lib/bareos/scripts/grant_bareos_privileges
   fi
