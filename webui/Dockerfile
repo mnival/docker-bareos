@@ -14,7 +14,7 @@ RUN set -ex; \
   apt full-upgrade -y; \
   \
   apt install -y --no-install-recommends curl ca-certificates; \
-  curl -s --fail ${BAREOS_KEY} -o /etc/apt/trusted.gpg.d/bareos-keyring.gpg; \
+  curl -s --fail ${BAREOS_KEY} -o /etc/apt/trusted.gpg.d/bareos-keyring.asc; \
   apt purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false curl; \
   printf "deb ${BAREOS_REPO} /\n" > /etc/apt/sources.list.d/bareos.list; \
   apt update; \
