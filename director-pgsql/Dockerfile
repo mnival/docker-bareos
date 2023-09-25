@@ -3,7 +3,8 @@ LABEL maintainer "Michael Nival <docker@mn-home.fr>"
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ENV BAREOS_REPO https://download.bareos.org/current/Debian_12/
+ENV BAREOS_VERSION 22
+ENV BAREOS_REPO https://download.bareos.com/bareos/release/${BAREOS_VERSION}/Debian_12/
 ENV BAREOS_KEY ${BAREOS_REPO}/Release.key
 
 RUN set -ex; \
