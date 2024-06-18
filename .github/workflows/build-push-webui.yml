@@ -69,7 +69,7 @@ jobs:
           password: ${{ secrets.QUAY_IO_TOKEN }}
 
       - name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ${{ steps.tags_caches.outputs.directory_name }}/
           platforms: linux/amd64
