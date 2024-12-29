@@ -1,4 +1,4 @@
-FROM debian:stable-20241016-slim
+FROM debian:stable-20241223-slim
 LABEL maintainer "Michael Nival <docker@mn-home.fr>"
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -21,6 +21,7 @@ RUN set -ex; \
   \
   apt -y install --no-install-recommends \
     bareos-webui \
+    libapache2-mod-php \
   ; \
   sed -i 's#Alias /bareos-webui#Alias /#; s#RewriteBase /bareos-webui#RewriteBase /#; s#public#public/#g' /etc/apache2/conf-available/bareos-webui.conf; \
   rm /var/log/apache2/access.log /var/log/apache2/error.log /var/log/apache2/other_vhosts_access.log; \
