@@ -1,4 +1,4 @@
-FROM debian:stable-20241223-slim
+FROM debian:stable-20250203-slim
 LABEL maintainer "Michael Nival <docker@mn-home.fr>"
 
 ENV DEBIAN_FRONTEND noninteractive
